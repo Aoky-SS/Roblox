@@ -37,14 +37,6 @@ local Player = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 local CoreGui = game:GetService("CoreGui")
 
-if UIElement:IsA("GuiObject") then
-    TweenService:Create(UIElement, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0.5}):Play()
-end
-
-if not UIListLayout:IsA("GuiObject") then
-    warn("Cannot tween UIListLayout, skipping.")
-end
-
 local isStudio
 local website = "github.com/Nebula-Softworks"
 
