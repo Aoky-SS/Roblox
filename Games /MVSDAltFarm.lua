@@ -3,13 +3,13 @@ local Player = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
 
 Player.Idled:Connect(function()
-    if _G.AntiAFK then
+    if AntiAFK then
         VirtualUser:CaptureController()
         VirtualUser:ClickButton2(Vector2.new())
     end
 end)
 
-if _G.AutoFarmV2 then
+if AutoFarmV2 then
     if not OriPosV2 then
         OriPosV2 = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
     end
