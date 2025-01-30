@@ -37,7 +37,7 @@ local ESP_SETTINGS = {
     Enabled = false,
     ShowBox = false,
     BoxType = "2D",
-    ShowName = false,
+    ShowName = true,  -- Set this to true if you want to display names
     ShowHealth = false,
     ShowDistance = false,
     ShowSkeletons = false,
@@ -77,7 +77,7 @@ local function createEsp(player)
             Color = ESP_SETTINGS.NameColor,
             Outline = true,
             Center = true,
-            Size = 13
+            Size = 18  -- Increased size of the name text
         }),
         healthOutline = create("Line", {
             Thickness = 3,
@@ -92,16 +92,11 @@ local function createEsp(player)
             Outline = true,
             Center = true
         }),
-        tracer = create("Line", {
-            Thickness = ESP_SETTINGS.TracerThickness,
-            Color = ESP_SETTINGS.TracerColor,
-            Transparency = 1
-        }),
         boxLines = {},
+        skeletonlines = {}
     }
 
     cache[player] = esp
-    cache[player]["skeletonlines"] = {}
 end
 
 local function isPlayerBehindWall(player)
@@ -151,7 +146,7 @@ local function updateEsp()
 
                     if ESP_SETTINGS.ShowName and ESP_SETTINGS.Enabled then
                         esp.name.Visible = true
-                        esp.name.Text = string.lower(player.Name)
+                        esp.name.Text = player.DisplayName  -- Show DisplayName instead of Username
                         esp.name.Position = Vector2.new(boxSize.X / 2 + boxPosition.X, boxPosition.Y - 16)
                         esp.name.Color = ESP_SETTINGS.NameColor
                     else
@@ -289,7 +284,7 @@ local function updateEsp()
                         if #esp["skeletonlines"] == 0 then
                             for _, bonePair in ipairs(bones) do
                                 local parentBone, childBone = bonePair[1], bonePair[2]
-                                
+                                 
                                 if player.Character and player.Character[parentBone] and player.Character[childBone] then
                                     local skeletonLine = create("Line", {
                                         Thickness = 1,
@@ -300,7 +295,7 @@ local function updateEsp()
                                 end
                             end
                         end
-                    
+                   
                         for _, lineData in ipairs(esp["skeletonlines"]) do
                             local skeletonLine = lineData[1]
                             local parentBone, childBone = lineData[2], lineData[3]
@@ -405,5 +400,6 @@ Players.PlayerRemoving:Connect(function(player)
     removeEsp(player)
 end)
 
-RunService.RenderStepped:Connect(updateEsp)
-return ESP_SETTINGS
+RunService.RenderStepped:Connect(function()
+    updateEsp()
+end)
